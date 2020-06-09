@@ -18,5 +18,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('author/<name>', views.getAuthor, name="author")
+    path('author/<name>', views.getAuthor, name="author"),
+    path('article/<int:id>', views.getSingle, name="singlePost"),
 ]
