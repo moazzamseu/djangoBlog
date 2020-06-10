@@ -20,4 +20,5 @@ urlpatterns = [
     path('', views.index, name="index"),
     path('author/<name>', views.getAuthor, name="author"),
     path('article/<int:id>', views.getSingle, name="singlePost"),
+    path('topic/<name>', views.getTopic, name="topic"),
 ]
