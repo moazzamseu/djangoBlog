@@ -19,13 +19,17 @@ def getSingle(request, id):
     post = get_object_or_404(Article, pk=id)
     first = Article.objects.first()
     last = Article.objects.last()
+    related = Article.objects.filter(category=post.category).exclude(id=id)[:4]
     context = {
         "post": post,
         "first": first,
-        "last": last
+        "last": last,
+        "related": related
     }
     return render(request, "single.html", context)
 
 
 def getTopic(request, name):
-    return render(request, "category.html")
+    cat = get_object_or_404(Category, name=name)
+    post = Article.objects.filter(category=cat.id)
+    return render(request, "category.html", {"post": post})
