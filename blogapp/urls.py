@@ -21,4 +21,6 @@ urlpatterns = [
     path('author/<name>', views.getAuthor, name="author"),
     path('article/<int:id>', views.getSingle, name="singlePost"),
     path('topic/<name>', views.getTopic, name="topic"),
+    path('login', views.getLogin, name="login"),
+    path('logout', views.getLogout, name="logout"),
 ]
