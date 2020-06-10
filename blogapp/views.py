@@ -3,12 +3,18 @@ from .models import Author, Article, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-
+from django.db.models import Q
 # Create your views here.
 
 
 def index(request):
     post = Article.objects.all()
+    search = request.GET.get('query')
+    if search:
+        post = post.filter(
+            Q(title__icontains=search)|
+            Q(body__icontains=search)
+        )
     paginator = Paginator(post, 4)  # Show 25 contacts per page.
 
     page_number = request.GET.get('page')
