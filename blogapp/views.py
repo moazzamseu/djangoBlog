@@ -98,10 +98,35 @@ def getCreate(request):
         return redirect('login')
 
 
+def getUpdate(request, pid):
+    if request.user.is_authenticated:
+        u = get_object_or_404(Author, name=request.user.id)
+        post = get_object_or_404(Article, id=pid)
+        form = createForm(request.POST or None, request.FILES or None, instance=post)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.author = u
+            instance.save()
+            return redirect('profile')
+        return render(request, 'create.html', {"form": form})
+    else:
+        return redirect('login')
+
+
+def getDelete(request, pid):
+    if request.user.is_authenticated:
+        post = get_object_or_404(Article, id=pid)
+        post.delete()
+        return redirect('profile')
+    else:
+        return redirect('login')
+
 def getProfile(request):
     if request.user.is_authenticated:
         user = get_object_or_404(Author, name=request.user.id)
         post = Article.objects.filter(author=request.user.id)
-        return render(request, 'logged_in_profile.html', {"post":post, "user":user})
+        return render(request, 'logged_in_profile.html', {"post": post, "user": user})
     else:
         return redirect('login')
+
+
