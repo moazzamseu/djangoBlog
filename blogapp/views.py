@@ -4,8 +4,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .forms import createForm
+from .forms import createForm, registerUser
 from django.contrib import messages
+
 # Create your views here.
 
 
@@ -126,6 +127,7 @@ def getDelete(request, pid):
     else:
         return redirect('login')
 
+
 def getProfile(request):
     if request.user.is_authenticated:
         user = get_object_or_404(Author, name=request.user.id)
@@ -135,3 +137,11 @@ def getProfile(request):
         return redirect('login')
 
 
+def get_register(request):
+    form = registerUser(request.POST or None)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
+        messages.success(request, 'Registration successfully completed')
+        return redirect('login')
+    return render(request, 'register.html', {"form": form})

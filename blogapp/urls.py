@@ -27,4 +27,5 @@ urlpatterns = [
     path('profile', views.getProfile, name="profile"),
     path('update/<int:pid>', views.getUpdate, name="update"),
     path('delete/<int:pid>', views.getDelete, name="delete"),
+    path('register', views.get_register, name="register"),
 ]
