@@ -86,11 +86,22 @@ def getLogout(request):
 
 def getCreate(request):
     if request.user.is_authenticated:
+        u = get_object_or_404(Author, name=request.user.id)
         form = createForm(request.POST or None, request.FILES or None)
         if form.is_valid():
-            instance=form.save(commit=False)
+            instance = form.save(commit=False)
+            instance.author = u
             instance.save()
             return redirect('index')
         return render(request, 'create.html', {"form":form})
+    else:
+        return redirect('login')
+
+
+def getProfile(request):
+    if request.user.is_authenticated:
+        user = get_object_or_404(Author, name=request.user.id)
+        post = Article.objects.filter(author=request.user.id)
+        return render(request, 'logged_in_profile.html', {"post":post, "user":user})
     else:
         return redirect('login')
