@@ -1,10 +1,10 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from .models import Author, Article, Category
+from .models import Author, Article, Category, comment
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .forms import createForm, registerUser, createAuthor
+from .forms import createForm, registerUser, createAuthor, commentForm
 from django.contrib import messages
 
 # Create your views here.
@@ -47,12 +47,20 @@ def getSingle(request, id):
     post = get_object_or_404(Article, pk=id)
     first = Article.objects.first()
     last = Article.objects.last()
+    getComment = comment.objects.filter(post=id)
     related = Article.objects.filter(category=post.category).exclude(id=id)[:4]
+    form = commentForm(request.POST or None)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.post = post
+        instance.save()
     context = {
         "post": post,
         "first": first,
         "last": last,
-        "related": related
+        "related": related,
+        "form": form,
+        "comment": getComment
     }
     return render(request, "single.html", context)
 

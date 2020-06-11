@@ -1,5 +1,5 @@
 from django import forms
-from .models import Article, Author
+from .models import Article, Author, comment
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -33,4 +33,14 @@ class createAuthor(forms.ModelForm):
         fields = [
             'profilePicture',
             'details',
+        ]
+
+
+class commentForm(forms.ModelForm):
+    class Meta:
+        model = comment
+        fields = [
+            'name',
+            'email',
+            'post_comment'
         ]
